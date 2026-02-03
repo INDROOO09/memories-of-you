@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Untuk Kamu 💙</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-image: url("bg.jpg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: white;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.page {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    animation: fadeIn 0.8s ease;
+    backdrop-filter: blur(5px);
+    background: rgba(0,0,0,0.3);
+}
+
+.active { display: flex; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+h1 {
+    font-size: clamp(28px, 5vw, 42px);
+    margin-bottom: 40px;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.7);
+    text-align: center;
+}
+
+.menu-buttons {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.menu-buttons button {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: none;
+    font-size: 40px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+    color: #1e40af;
+    font-weight: bold;
+}
+
+.menu-buttons button:hover {
+    transform: scale(1.15) translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+
+.gallery-container {
+    width: min(90%, 1200px);
+    height: 70vh;
+    background: rgba(0,0,0,0.7);
+    border-radius: 25px;
+    display: flex;
+    padding: 25px;
+    gap: 25px;
+}
+
+.thumbnail-list {
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    overflow-y: auto;
+}
+
+.thumbnail-list img,
+.thumbnail-list video {
+    width: 100%;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 15px;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.thumbnail-list img:hover,
+.thumbnail-list video:hover {
+    opacity: 1;
+    transform: scale(1.05);
+    border-color: #60a5fa;
+}
+
+.main-display {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.4);
+    border-radius: 20px;
+}
+
+.main-display:empty::before {
+    content: "Semua yang darimu, favoritku💙";
+    font-size: clamp(18px, 3vw, 24px);
+    color: rgba(255,255,255,0.8);
+    text-align: center;
+    padding: 40px;
+}
+
+.main-display img,
+.main-display video {
+    max-width: 95%;
+    max-height: 95%;
+    border-radius: 20px;
+    box-shadow: 0 0 50px rgba(0,0,0,0.8);
+}
+
+.back-btn {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    padding: 15px 25px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    backdrop-filter: blur(20px);
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    background: rgba(255,255,255,0.3);
+    transform: translateX(-5px);
+}
+
+/* SURAT - SLIDE UP/DOWN FIXED */
+.letter-container {
+    width: min(90%, 800px);
+    height: 70vh;
+    background: rgba(0,0,0,0.7);
+    border-radius: 25px;
+    padding: 40px;
+    overflow-y: auto;
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    scroll-behavior: smooth;
+}
+
+.letter-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.letter-container::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+}
+
+.letter-container::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, #60a5fa, #a78bfa);
+    border-radius: 10px;
+}
+
+.letter-container::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+}
+
+.letter-content {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: slideUp 0.8s ease forwards;
+}
+
+@keyframes slideUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.letter-paragraph {
+    margin-bottom: 25px;
+    font-size: clamp(16px, 2.5vw, 20px);
+    line-height: 1.7;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: paragraphSlide 0.6s ease forwards;
+}
+
+.letter-paragraph:nth-child(1) { animation-delay: 0.2s; }
+.letter-paragraph:nth-child(2) { animation-delay: 0.4s; }
+.letter-paragraph:nth-child(3) { animation-delay: 0.6s; }
+.letter-paragraph:nth-child(4) { animation-delay: 0.8s; }
+.letter-paragraph:nth-child(5) { animation-delay: 1.0s; }
+
+@keyframes paragraphSlide {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* MUSIC PLAYER WITH PHOTO */
+.music-container {
+    width: min(90%, 500px);
+    height: 70vh;
+    background: rgba(0,0,0,0.8);
+    border-radius: 25px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 25px 70px rgba(0,0,0,0.6);
+    position: relative;
+    overflow: hidden;
+}
+
+.music-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #60a5fa, #a78bfa, #60a5fa);
+    background-size: 200% 100%;
+    animation: musicGlow 2s ease-in-out infinite;
+}
+
+@keyframes musicGlow {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.music-title {
+    font-size: clamp(20px, 3.5vw, 28px);
+    margin-bottom: 20px;
+    text-align: center;
+    background: linear-gradient(45deg, #fff, #e0e7ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+}
+
+.music-cover {
+    width: 200px;
+    height: 200px;
+    border-radius: 20px;
+    object-fit: cover;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+    margin-bottom: 25px;
+    animation: rotateCover 20s linear infinite paused;
+}
+
+@keyframes rotateCover {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.music-player {
+    width: 100%;
+    max-width: 400px;
+}
+
+.music-player audio {
+    width: 100%;
+    outline: none;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+.music-controls {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.music-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.play-btn {
+    width: 70px;
+    height: 70px;
+    font-size: 28px;
+    background: linear-gradient(45deg, #60a5fa, #3b82f6);
+    color: white;
+    box-shadow: 0 10px 30px rgba(96, 165, 250, 0.4);
+}
+
+.music-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.stop-btn { background: #ef4444; color: white; }
+.prev-btn, .next-btn { background: rgba(255,255,255,0.9); color: #1e40af; }
+
+.current-song {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 16px;
+    color: #60a5fa;
+    font-weight: 500;
+}
+</style>
+</head>
+
+<body>
+
+<!-- MENU UTAMA -->
+<div id="menu" class="page active">
+    <h1>Untuk Kamu 💙</h1>
+    <div class="menu-buttons">
+        <button onclick="openPage('gallery')">🖼️</button>
+        <button onclick="openPage('letter')">💌</button>
+        <button onclick="openPage('music')">🎵</button>
+    </div>
+</div>
+
+<!-- GALERI -->
+<div id="gallery" class="page">
+    <button class="back-btn" onclick="openPage('menu')">⬅ Kembali</button>
+    <h1>Memories of You</h1>
+    
+    <div class="gallery-container">
+        <div class="thumbnail-list" id="thumbnailList"></div>
+        <div class="main-display" id="mainDisplay"></div>
+    </div>
+</div>
+
+<!-- SURAT - FIXED SLIDE EFFECT -->
+<div id="letter" class="page">
+    <button class="back-btn" onclick="openPage('menu')">⬅ Kembali</button>
+    <h1>Surat Untuk Kamu 💌</h1>
+    <div class="letter-container">
+        <div class="letter-content">
+            <div class="letter-paragraph">
+                akuu sering mikir, betapa beruntungnya aku bisa punya nopaa di hidupku.
+            </div>
+            <div class="letter-paragraph">
+                barengg nopaa itu rasanya tenang, sederhana, tapi penuh.
+                aku senang sama caramu hadir, caramu peduli, caramu bikin aku ngerasa diterima apa adanya 💙
+            </div>
+            <div class="letter-paragraph">
+                mungkin aku ga selalu pandai nunjukin perasaanku,
+                tapi satu hal yang pasti, perasaanku ke nopaa besar, tulus, dan terus tumbuh.
+            </div>
+            <div class="letter-paragraph">
+                aku bersyukur punyaa banyak momement bareng nopaa,ku bisa jalan bareng nopaa, ketawa sama nopaa,
+                dan belajar jadi pribadi yang lebih baik saat ada di dekatmu 💙
+            </div>
+            <div class="letter-paragraph">
+                makasih yaa udah jadi nopaa yang aku punya hari ini.
+                dan semoga, di hari-hari ke depan, aku masih bisa berdiri di sisimu 💙
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MUSIC PLAYER WITH PHOTO -->
+<div id="music" class="page">
+    <button class="back-btn" onclick="openPage('menu')">⬅ Kembali</button>
+    <h1>Lagu Untukmu 🎵</h1>
+    <div class="music-container">
+        <div class="music-title">Adie, Janine Berdin - Mahika</div>
+        
+        <img src="wp1.jpg" alt="Cover Mahika" class="music-cover" id="musicCover">
+        
+        <div class="music-player">
+            <audio id="musicPlayer" preload="metadata">
+                <source src="lagu1.mp3" type="audio/mpeg">
+                Browser tidak mendukung audio.
+            </audio>
+            
+            <div class="music-controls">
+                <button class="music-btn prev-btn" onclick="prevSong()">⏮</button>
+                <button class="music-btn play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+                <button class="music-btn stop-btn" onclick="stopMusic()">⏹</button>
+                <button class="music-btn next-btn" onclick="nextSong()">⏭</button>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<script>
+// Gallery files
+const mediaFiles = [
+    'p1.jpeg', 'p3.jpeg', 'p4.jpeg', 'p5.jpeg', 'p6.jpeg', 'p7.jpeg',
+    'v1.mp4', 'v2.mp4','v3.mp4'
+];
+
+// Music files
+const musicFiles = ['lagu1.mp3'];
+const songNames = ['Mahika - Adie & Janine'];
+let currentSongIndex = 0;
+let audioPlayer = null;
+let musicCover = null;
+
+function openPage(pageId) {
+    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+    
+    if(pageId === 'gallery') {
+        initGallery();
+    } else if(pageId === 'music') {
+        initMusic();
+    }
+}
+
+function initGallery() {
+    const thumbnailList = document.getElementById('thumbnailList');
+    thumbnailList.innerHTML = '';
+    
+    mediaFiles.forEach((file, index) => {
+        const isVideo = file.includes('.mp4');
+        const element = document.createElement(isVideo ? 'video' : 'img');
+        
+        element.src = file;
+        element.onclick = () => showMedia(file, isVideo);
+        element.muted = true;
+        
+        element.onerror = () => {
+            element.outerHTML = `
+                <div style="width:100%;height:90px;background:#4a5568;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:30px;opacity:0.7;cursor:pointer;" onclick="showPlaceholder('${file}')" title="File ${file} tidak ditemukan">
+                    ${isVideo ? '🎥' : '📷'}
+                </div>
+            `;
+        };
+        
+        thumbnailList.appendChild(element);
+    });
+}
+
+function initMusic() {
+    audioPlayer = document.getElementById('musicPlayer');
+    musicCover = document.getElementById('musicCover');
+    updateSongDisplay();
+    
+    setTimeout(() => {
+        if (audioPlayer && audioPlayer.paused) {
+            audioPlayer.play().catch(e => console.log('Autoplay blocked'));
+        }
+    }, 500);
+}
+
+function togglePlay() {
+    if (!audioPlayer) return;
+    
+    if(audioPlayer.paused) {
+        audioPlayer.play();
+        document.getElementById('playBtn').innerHTML = '⏸';
+        document.getElementById('musicCover').style.animationPlayState = 'running';
+    } else {
+        audioPlayer.pause();
+        document.getElementById('playBtn').innerHTML = '▶';
+        document.getElementById('musicCover').style.animationPlayState = 'paused';
+    }
+}
+
+function stopMusic() {
+    if (!audioPlayer) return;
+    audioPlayer.pause();
+    audioPlayer.currentTime = 0;
+    document.getElementById('playBtn').innerHTML = '▶';
+    document.getElementById('musicCover').style.animationPlayState = 'paused';
+}
+
+function prevSong() {
+    if (musicFiles.length === 1) return;
+    currentSongIndex = (currentSongIndex - 1 + musicFiles.length) % musicFiles.length;
+    switchSong();
+}
+
+function nextSong() {
+    if (musicFiles.length === 1) return;
+    currentSongIndex = (currentSongIndex + 1) % musicFiles.length;
+    switchSong();
+}
+
+function switchSong() {
+    if (!audioPlayer) return;
+    audioPlayer.src = musicFiles[currentSongIndex];
+    audioPlayer.load();
+    audioPlayer.play();
+    document.getElementById('playBtn').innerHTML = '⏸';
+    document.getElementById('musicCover').style.animationPlayState = 'running';
+    updateSongDisplay();
+}
+
+function updateSongDisplay() {
+    document.getElementById('currentSong').textContent = songNames[currentSongIndex] || musicFiles[currentSongIndex];
+}
+
+function showMedia(filename, isVideo) {
+    const mainDisplay = document.getElementById('mainDisplay');
+    mainDisplay.innerHTML = 'Memuat... 💙';
+    
+    if(isVideo) {
+        const video = document.createElement('video');
+        video.src = filename;
+        video.controls = true;
+        video.autoplay = true;
+        video.loop = true;
+        video.muted = true;
+        video.style.maxWidth = '95%';
+        video.style.maxHeight = '95%';
+        video.style.borderRadius = '20px';
+        video.onerror = () => mainDisplay.innerHTML = `Video ${filename} tidak ditemukan`;
+        
+        mainDisplay.innerHTML = '';
+        mainDisplay.appendChild(video);
+    } else {
+        const img = new Image();
+        img.src = filename;
+        img.style.maxWidth = '95%';
+        img.style.maxHeight = '95%';
+        img.style.borderRadius = '20px';
+        img.onload = () => {
+            mainDisplay.innerHTML = '';
+            mainDisplay.appendChild(img);
+        };
+        img.onerror = () => {
+            mainDisplay.innerHTML = `Gambar ${filename} tidak ditemukan`;
+        };
+    }
+}
+
+function showPlaceholder(filename) {
+    document.getElementById('mainDisplay').innerHTML = 
+        `File ${filename} tidak ditemukan. Pastikan semua file ada di folder yang sama dengan HTML 💙`;
+}
+</script>
+
+</body>
+</html>
