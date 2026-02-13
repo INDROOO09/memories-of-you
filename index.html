@@ -449,6 +449,11 @@ h1 {
         font-size: 45px
     }
 }
+
+/* HIDDEN AUDIO PLAYER FOR FLOWER CURSOR */
+#flowerAudio {
+    display: none;
+}
 </style>
 </head>
 
@@ -498,6 +503,9 @@ h1 {
 
 <!-- HALAMAN I LOVE YOU - FLOWER CURSOR -->
 <div id="flowerCursor" class="page" style="background: #0a0e27;">
+    <audio id="flowerAudio" preload="auto" loop>
+        <source src="lagu2.mp3" type="audio/mpeg">
+    </audio>
     <div class="flower-container">
         <canvas id="flowerCanvas"></canvas>
         <div class="flower-clean-btn">clean the screen</div>
@@ -600,6 +608,12 @@ function openPinPage() {
 function goToMenu() {
     document.body.classList.remove('black-bg', 'hide-chocolate');
     openPage('menu');
+    // Stop flower cursor music when going back to menu
+    const flowerAudio = document.getElementById('flowerAudio');
+    if (flowerAudio) {
+        flowerAudio.pause();
+        flowerAudio.currentTime = 0;
+    }
 }
 
 function startHeartAnimation() {
@@ -608,7 +622,25 @@ function startHeartAnimation() {
     setTimeout(() => {
         openPage('flowerCursor');
         initFlowerCursor();
+        // Auto-play music when flower cursor page opens
+        playFlowerMusic();
     }, 4000);
+}
+
+// FLOWER CURSOR MUSIC AUTO-PLAY
+function playFlowerMusic() {
+    const flowerAudio = document.getElementById('flowerAudio');
+    if (flowerAudio) {
+        // Try to play with error handling for autoplay restrictions
+        flowerAudio.play().catch(error => {
+            console.log('Auto-play was prevented:', error);
+            // Fallback: play on first user interaction
+            document.addEventListener('click', function playOnClick() {
+                flowerAudio.play();
+                document.removeEventListener('click', playOnClick);
+            }, { once: true });
+        });
+    }
 }
 
 // HEART ANIMATION
