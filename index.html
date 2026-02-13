@@ -21,6 +21,16 @@ body {
     color: white;
     height: 100vh;
     overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+body.black-bg {
+    background: #000 !important;
+    background-image: none !important;
+}
+
+body.hide-chocolate #chocolateBtn {
+    display: none !important;
 }
 
 .page {
@@ -50,6 +60,33 @@ h1 {
     text-align: center;
 }
 
+.floating-icon-btn {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: none;
+    font-size: 32px;
+    cursor: pointer;
+    background: linear-gradient(45deg, #8b4513, #a0522d, #d2691e);
+    color: #f4e4bc;
+    box-shadow: 0 10px 30px rgba(139, 69, 19, 0.5);
+    backdrop-filter: blur(15px);
+    z-index: 1000;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.floating-icon-btn:hover {
+    transform: scale(1.15) rotate(10deg);
+    box-shadow: 0 20px 50px rgba(139, 69, 19, 0.7);
+    background: linear-gradient(45deg, #a0522d, #d2691e, #cd853f);
+}
+
 .menu-buttons {
     display: flex;
     gap: 30px;
@@ -77,66 +114,86 @@ h1 {
     box-shadow: 0 20px 40px rgba(0,0,0,0.5);
 }
 
-.gallery-container {
-    width: min(90%, 1200px);
+/* PIN CODE STYLES */
+.pin-container {
+    width: min(90%, 450px);
     height: 70vh;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0,0,0,0.9);
     border-radius: 25px;
-    display: flex;
-    padding: 25px;
-    gap: 25px;
-}
-
-.thumbnail-list {
-    width: 150px;
+    padding: 40px;
     display: flex;
     flex-direction: column;
-    gap: 18px;
-    overflow-y: auto;
-}
-
-.thumbnail-list img,
-.thumbnail-list video {
-    width: 100%;
-    height: 90px;
-    object-fit: cover;
-    border-radius: 15px;
-    cursor: pointer;
-    opacity: 0.8;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-}
-
-.thumbnail-list img:hover,
-.thumbnail-list video:hover {
-    opacity: 1;
-    transform: scale(1.05);
-    border-color: #60a5fa;
-}
-
-.main-display {
-    flex: 1;
-    display: flex;
-    justify-content: center;
     align-items: center;
-    background: rgba(0,0,0,0.4);
-    border-radius: 20px;
-}
-
-.main-display:empty::before {
-    content: "Semua yang darimu, favoritku💙";
-    font-size: clamp(18px, 3vw, 24px);
-    color: rgba(255,255,255,0.8);
+    justify-content: center;
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(255,255,255,0.3);
+    box-shadow: 0 25px 70px rgba(0,0,0,0.8);
     text-align: center;
-    padding: 40px;
 }
 
-.main-display img,
-.main-display video {
-    max-width: 95%;
-    max-height: 95%;
+.pin-title {
+    font-size: clamp(24px, 4vw, 32px);
+    margin-bottom: 30px;
+    background: linear-gradient(45deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.pin-input {
+    width: 280px;
+    height: 60px;
+    font-size: 32px;
+    text-align: center;
+    letter-spacing: 20px;
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(96,165,250,0.5);
+    border-radius: 15px;
+    color: white;
+    font-weight: bold;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.pin-input:focus {
+    outline: none;
+    border-color: #60a5fa;
+    box-shadow: 0 0 20px rgba(96,165,250,0.5);
+    transform: scale(1.02);
+}
+
+.pin-keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    max-width: 300px;
+}
+
+.pin-key {
+    width: 80px;
+    height: 80px;
     border-radius: 20px;
-    box-shadow: 0 0 50px rgba(0,0,0,0.8);
+    border: none;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    background: linear-gradient(45deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
+    color: white;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+}
+
+.pin-key:hover {
+    transform: scale(1.1) translateY(-5px);
+    background: linear-gradient(45deg, #60a5fa, #a78bfa);
+    box-shadow: 0 15px 35px rgba(96,165,250,0.4);
+}
+
+.pin-status {
+    margin-top: 20px;
+    font-size: 20px;
+    min-height: 30px;
 }
 
 .back-btn {
@@ -159,7 +216,67 @@ h1 {
     transform: translateX(-5px);
 }
 
-/* SURAT - SLIDE UP/DOWN FIXED */
+/* GALERI */
+.gallery-container {
+    width: min(90%, 1200px);
+    height: 70vh;
+    background: rgba(0,0,0,0.7);
+    border-radius: 25px;
+    display: flex;
+    padding: 25px;
+    gap: 25px;
+}
+
+.thumbnail-list { 
+    width: 150px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 18px; 
+    overflow-y: auto; 
+}
+
+.thumbnail-list img, .thumbnail-list video { 
+    width: 100%; 
+    height: 90px; 
+    object-fit: cover; 
+    border-radius: 15px; 
+    cursor: pointer; 
+    opacity: 0.8; 
+    transition: all 0.3s ease; 
+    border: 2px solid transparent; 
+}
+
+.thumbnail-list img:hover, .thumbnail-list video:hover { 
+    opacity: 1; 
+    transform: scale(1.05); 
+    border-color: #60a5fa; 
+}
+
+.main-display {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.4);
+    border-radius: 20px;
+}
+
+.main-display:empty::before {
+    content: "Semua yang darimu, favoritku💙";
+    font-size: clamp(18px, 3vw, 24px);
+    color: rgba(255,255,255,0.8);
+    text-align: center;
+    padding: 40px;
+}
+
+.main-display img, .main-display video {
+    max-width: 95%;
+    max-height: 95%;
+    border-radius: 20px;
+    box-shadow: 0 0 50px rgba(0,0,0,0.8);
+}
+
+/* SURAT */
 .letter-container {
     width: min(90%, 800px);
     height: 70vh;
@@ -173,37 +290,13 @@ h1 {
     scroll-behavior: smooth;
 }
 
-.letter-container::-webkit-scrollbar {
-    width: 8px;
-}
+.letter-container::-webkit-scrollbar { width: 8px; }
+.letter-container::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); border-radius: 10px; }
+.letter-container::-webkit-scrollbar-thumb { background: linear-gradient(45deg, #60a5fa, #a78bfa); border-radius: 10px; }
+.letter-container::-webkit-scrollbar-thumb:hover { background: linear-gradient(45deg, #3b82f6, #8b5cf6); }
 
-.letter-container::-webkit-scrollbar-track {
-    background: rgba(255,255,255,0.1);
-    border-radius: 10px;
-}
-
-.letter-container::-webkit-scrollbar-thumb {
-    background: linear-gradient(45deg, #60a5fa, #a78bfa);
-    border-radius: 10px;
-}
-
-.letter-container::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(45deg, #3b82f6, #8b5cf6);
-}
-
-.letter-content {
-    opacity: 0;
-    transform: translateY(30px);
-    animation: slideUp 0.8s ease forwards;
-}
-
-@keyframes slideUp {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
+.letter-content { opacity: 0; transform: translateY(30px); animation: slideUp 0.8s ease forwards; }
+@keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
 .letter-paragraph {
     margin-bottom: 25px;
     font-size: clamp(16px, 2.5vw, 20px);
@@ -212,21 +305,14 @@ h1 {
     transform: translateY(20px);
     animation: paragraphSlide 0.6s ease forwards;
 }
-
 .letter-paragraph:nth-child(1) { animation-delay: 0.2s; }
 .letter-paragraph:nth-child(2) { animation-delay: 0.4s; }
 .letter-paragraph:nth-child(3) { animation-delay: 0.6s; }
 .letter-paragraph:nth-child(4) { animation-delay: 0.8s; }
 .letter-paragraph:nth-child(5) { animation-delay: 1.0s; }
+@keyframes paragraphSlide { to { opacity: 1; transform: translateY(0); } }
 
-@keyframes paragraphSlide {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* MUSIC PLAYER WITH PHOTO */
+/* MUSIC - PERBAIKAN TOMBOl SEJAJAR */
 .music-container {
     width: min(90%, 500px);
     height: 70vh;
@@ -244,32 +330,10 @@ h1 {
     overflow: hidden;
 }
 
-.music-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 5px;
-    background: linear-gradient(90deg, #60a5fa, #a78bfa, #60a5fa);
-    background-size: 200% 100%;
-    animation: musicGlow 2s ease-in-out infinite;
-}
-
-@keyframes musicGlow {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-}
-
 .music-title {
     font-size: clamp(20px, 3.5vw, 28px);
     margin-bottom: 20px;
     text-align: center;
-    background: linear-gradient(45deg, #fff, #e0e7ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-shadow: none;
 }
 
 .music-cover {
@@ -287,225 +351,348 @@ h1 {
     to { transform: rotate(360deg); }
 }
 
-.music-player {
-    width: 100%;
-    max-width: 400px;
-}
-
-.music-player audio {
-    width: 100%;
-    outline: none;
-    margin-bottom: 20px;
-    border-radius: 10px;
-}
-
 .music-controls {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    flex-wrap: wrap;
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 15px !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    width: 100%;
+    max-width: 350px;
 }
 
 .music-btn {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
+    width: 60px !important;
+    height: 60px !important;
+    border-radius: 50% !important;
+    border: none !important;
+    font-size: 24px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.3s ease !important;
+    backdrop-filter: blur(10px) !important;
+    flex-shrink: 0 !important;
 }
 
 .play-btn {
-    width: 70px;
-    height: 70px;
-    font-size: 28px;
-    background: linear-gradient(45deg, #60a5fa, #3b82f6);
-    color: white;
-    box-shadow: 0 10px 30px rgba(96, 165, 250, 0.4);
+    width: 70px !important;
+    height: 70px !important;
+    font-size: 28px !important;
+    background: linear-gradient(45deg, #60a5fa, #3b82f6) !important;
+    color: white !important;
+    box-shadow: 0 10px 30px rgba(96, 165, 250, 0.4) !important;
 }
 
 .music-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    transform: scale(1.1) !important;
 }
 
-.stop-btn { background: #ef4444; color: white; }
-.prev-btn, .next-btn { background: rgba(255,255,255,0.9); color: #1e40af; }
+.stop-btn { 
+    background: #ef4444 !important; 
+    color: white !important; 
+}
 
-.current-song {
+/* FLOWER CURSOR STYLES */
+.flower-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: start;
+}
+
+.flower-clean-btn {
+    z-index: 1;
+    font-family: sans-serif;
+    font-size: 15px;
+    color: white;
+    text-shadow: 0 0 10px #000000;
+    user-select: none;
+    padding: 0 5px 15px 15px;
+    position: relative;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#flowerCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.flower-name {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    transform: translate(-50%, -50%);
+    color: white;
     text-align: center;
-    margin-top: 15px;
-    font-size: 16px;
-    color: #60a5fa;
-    font-weight: 500;
+    font-size: 4vw;
+    text-shadow: 0 0 5px #000000;
+    user-select: none;
+    pointer-events: none;
+    font-family: Georgia, serif;
+}
+
+@media all and (min-width: 640px) {
+    .flower-name {
+        font-size: 45px
+    }
 }
 </style>
 </head>
 
 <body>
 
+<!-- TOMBOL ICON COKLAT -->
+<button class="floating-icon-btn" id="chocolateBtn" onclick="openPinPage()" title="Rahasia Khusus">🍫</button>
+
 <!-- MENU UTAMA -->
 <div id="menu" class="page active">
     <h1>Untuk Kamu 💙</h1>
     <div class="menu-buttons">
-        <button onclick="openPage('gallery')">🖼️</button>
-        <button onclick="openPage('letter')">💌</button>
-        <button onclick="openPage('music')">🎵</button>
+        <button onclick="openSubPage('gallery')">🖼️</button>
+        <button onclick="openSubPage('letter')">💌</button>
+        <button onclick="openSubPage('music')">🎵</button>
     </div>
 </div>
 
+<!-- HALAMAN PIN CODE -->
+<div id="pin" class="page">
+    <button class="back-btn" onclick="goToMenu()">⬅ Kembali ke Menu</button>
+    <h1>🔐 Masukkan Kode Rahasia</h1>
+    <div class="pin-container">
+        <div class="pin-title">Cokelat Spesialmu</div>
+        <input type="password" class="pin-input" id="pinInput" maxlength="6" autocomplete="off">
+        <div class="pin-keypad">
+            <button class="pin-key" onclick="addPin('1')">1</button>
+            <button class="pin-key" onclick="addPin('2')">2</button>
+            <button class="pin-key" onclick="addPin('3')">3</button>
+            <button class="pin-key" onclick="addPin('4')">4</button>
+            <button class="pin-key" onclick="addPin('5')">5</button>
+            <button class="pin-key" onclick="addPin('6')">6</button>
+            <button class="pin-key" onclick="addPin('7')">7</button>
+            <button class="pin-key" onclick="addPin('8')">8</button>
+            <button class="pin-key" onclick="addPin('9')">9</button>
+            <button class="pin-key" onclick="addPin('0')" style="grid-column: span 2;">0</button>
+            <button class="pin-key" onclick="clearPin()" style="background: linear-gradient(45deg, #ef4444, #dc2626);">🗑️</button>
+        </div>
+        <div class="pin-status" id="pinStatus"></div>
+    </div>
+</div>
+
+<!-- HALAMAN HEART ANIMATION -->
+<div id="heartAnimation" class="page" style="background: black;">
+    <canvas id="alx" style="display: block;"></canvas>
+</div>
+
+<!-- HALAMAN I LOVE YOU - FLOWER CURSOR -->
+<div id="flowerCursor" class="page" style="background: #0a0e27;">
+    <div class="flower-container">
+        <canvas id="flowerCanvas"></canvas>
+        <div class="flower-clean-btn">clean the screen</div>
+    </div>
+    <div class="flower-name">I Love You</div>
+</div>
+
+<!-- HALAMAN HITAM KOSONG -->
+<div id="blackScreen" class="page" style="background: black;"></div>
+
 <!-- GALERI -->
 <div id="gallery" class="page">
-    <button class="back-btn" onclick="openPage('menu')">⬅ Kembali</button>
+    <button class="back-btn" onclick="goToMenu()">⬅ Kembali ke Menu</button>
     <h1>Memories of You</h1>
-    
     <div class="gallery-container">
         <div class="thumbnail-list" id="thumbnailList"></div>
         <div class="main-display" id="mainDisplay"></div>
     </div>
 </div>
 
-<!-- SURAT - FIXED SLIDE EFFECT -->
+<!-- SURAT -->
 <div id="letter" class="page">
-    <button class="back-btn" onclick="openPage('menu')">⬅ Kembali</button>
+    <button class="back-btn" onclick="goToMenu()">⬅ Kembali ke Menu</button>
     <h1>Surat Untuk Kamu 💌</h1>
     <div class="letter-container">
         <div class="letter-content">
-            <div class="letter-paragraph">
-                akuu sering mikir, betapa beruntungnya aku bisa punya nopaa di hidupku.
-            </div>
-            <div class="letter-paragraph">
-                barengg nopaa itu rasanya tenang, sederhana, tapi penuh.
-                aku senang sama caramu hadir, caramu peduli, caramu bikin aku ngerasa diterima apa adanya 💙
-            </div>
-            <div class="letter-paragraph">
-                mungkin aku ga selalu pandai nunjukin perasaanku,
-                tapi satu hal yang pasti, perasaanku ke nopaa besar, tulus, dan terus tumbuh.
-            </div>
-            <div class="letter-paragraph">
-                aku bersyukur punyaa banyak momement bareng nopaa,ku bisa jalan bareng nopaa, ketawa sama nopaa,
-                dan belajar jadi pribadi yang lebih baik saat ada di dekatmu 💙
-            </div>
-            <div class="letter-paragraph">
-                makasih yaa udah jadi nopaa yang aku punya hari ini.
-                dan semoga, di hari-hari ke depan, aku masih bisa berdiri di sisimu 💙
-            </div>
+            <div class="letter-paragraph">akuu sering mikir, betapa beruntungnya aku bisa punya nopaa di hidupku.</div>
+            <div class="letter-paragraph">barengg nopaa itu rasanya tenang, sederhana, tapi penuh. aku senang sama caramu hadir, caramu peduli, caramu bikin aku ngerasa diterima apa adanya 💙</div>
+            <div class="letter-paragraph">mungkin aku ga selalu pandai nunjukin perasaanku, tapi satu hal yang pasti, perasaanku ke nopaa besar, tulus, dan terus tumbuh.</div>
+            <div class="letter-paragraph">aku bersyukur punyaa banyak momement bareng nopaa,ku bisa jalan bareng nopaa, ketawa sama nopaa, dan belajar jadi pribadi yang lebih baik saat ada di dekatmu 💙</div>
+            <div class="letter-paragraph">makasih yaa udah jadi nopaa yang aku punya hari ini. dan semoga, di hari-hari ke depan, aku masih bisa berdiri di sisimu 💙</div>
         </div>
     </div>
 </div>
 
-<!-- MUSIC PLAYER WITH PHOTO -->
+<!-- MUSIC -->
 <div id="music" class="page">
-    <button class="back-btn" onclick="openPage('menu')">⬅ Kembali</button>
+    <button class="back-btn" onclick="goToMenu()">⬅ Kembali ke Menu</button>
     <h1>Lagu Untukmu 🎵</h1>
     <div class="music-container">
         <div class="music-title">Adie, Janine Berdin - Mahika</div>
-        
-        <img src="wp1.jpg" alt="Cover Mahika" class="music-cover" id="musicCover">
-        
-        <div class="music-player">
-            <audio id="musicPlayer" preload="metadata">
-                <source src="lagu1.mp3" type="audio/mpeg">
-                Browser tidak mendukung audio.
-            </audio>
-            
-            <div class="music-controls">
-                <button class="music-btn prev-btn" onclick="prevSong()">⏮</button>
-                <button class="music-btn play-btn" id="playBtn" onclick="togglePlay()">▶</button>
-                <button class="music-btn stop-btn" onclick="stopMusic()">⏹</button>
-                <button class="music-btn next-btn" onclick="nextSong()">⏭</button>
-            </div>
-            
+        <img src="wp1.jpg" alt="Cover" class="music-cover" id="musicCover">
+        <audio id="musicPlayer" preload="metadata" style="width: 100%; margin-bottom: 20px; border-radius: 10px;">
+            <source src="lagu1.mp3" type="audio/mpeg">
+        </audio>
+        <div class="music-controls">
+            <button class="music-btn" onclick="prevSong()">⏮</button>
+            <button class="music-btn play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+            <button class="music-btn stop-btn" onclick="stopMusic()">⏹</button>
+            <button class="music-btn" onclick="nextSong()">⏭</button>
         </div>
     </div>
 </div>
 
 <script>
-// Gallery files
-const mediaFiles = [
-    'p1.jpeg', 'p3.jpeg', 'p4.jpeg', 'p5.jpeg', 'p6.jpeg', 'p7.jpeg',
-    'v1.mp4', 'v2.mp4','v3.mp4'
-];
-
-// Music files
-const musicFiles = ['lagu1.mp3'];
-const songNames = ['Mahika - Adie & Janine'];
-let currentSongIndex = 0;
-let audioPlayer = null;
-let musicCover = null;
-
-function openPage(pageId) {
-    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-    document.getElementById(pageId).classList.add('active');
-    
-    if(pageId === 'gallery') {
-        initGallery();
-    } else if(pageId === 'music') {
-        initMusic();
+// PIN CODE
+const CORRECT_PIN = "130126";
+function addPin(num) {
+    const input = document.getElementById('pinInput');
+    if (input.value.length < 6) input.value += num;
+    if (input.value.length === 6) checkPin();
+}
+function clearPin() {
+    document.getElementById('pinInput').value = '';
+    document.getElementById('pinStatus').textContent = '';
+}
+function checkPin() {
+    const input = document.getElementById('pinInput');
+    const status = document.getElementById('pinStatus');
+    if (input.value === CORRECT_PIN) {
+        status.innerHTML = '✅ Kode benar! Loading hadiah... 💙';
+        status.style.color = '#10b981';
+        setTimeout(startHeartAnimation, 1000);
+    } else {
+        status.innerHTML = '❌ Kode salah! Coba lagi...';
+        status.style.color = '#ef4444';
+        input.value = '';
+        setTimeout(() => status.textContent = '', 2000);
     }
 }
 
-function initGallery() {
-    const thumbnailList = document.getElementById('thumbnailList');
-    thumbnailList.innerHTML = '';
+// NAVIGASI
+function openPage(pageId) {
+    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+}
+
+function openSubPage(pageId) {
+    document.body.classList.add('hide-chocolate');
+    openPage(pageId);
+    if(pageId === 'gallery') initGallery();
+    else if(pageId === 'music') initMusic();
+}
+
+function openPinPage() {
+    document.body.classList.add('black-bg', 'hide-chocolate');
+    openPage('pin');
+}
+
+function goToMenu() {
+    document.body.classList.remove('black-bg', 'hide-chocolate');
+    openPage('menu');
+}
+
+function startHeartAnimation() {
+    openPage('heartAnimation');
+    initHeartAnimation();
+    setTimeout(() => {
+        openPage('flowerCursor');
+        initFlowerCursor();
+    }, 4000);
+}
+
+// HEART ANIMATION
+function initHeartAnimation() {
+    var c = document.getElementById('alx'), a = c.getContext('2d');
+    c.width = innerWidth; c.height = innerHeight;
+    var e = [], h = [], WIDTH = innerWidth, HEIGHT = innerHeight, v = 56, R = Math.random, C = Math.cos, Y = 6.3;
     
-    mediaFiles.forEach((file, index) => {
+    for (i = 0; i < Y; i += 0.2) h.push([WIDTH/2+210*Math.pow(Math.sin(i),3), HEIGHT/2+13*-(15*C(i)-5*C(2*i)-2*C(3*i)-C(4*i))]);
+    for (i = 0; i < Y; i += 0.4) h.push([WIDTH/2+150*Math.pow(Math.sin(i),3), HEIGHT/2+9*-(15*C(i)-5*C(2*i)-2*C(3*i)-C(4*i))]);
+    for (i = 0; i < Y; i += 0.8) h.push([WIDTH/2+90*Math.pow(Math.sin(i),3), HEIGHT/2+5*-(15*C(i)-5*C(2*i)-2*C(3*i)-C(4*i))]);
+    
+    for (i = 0; i < v;) {
+        x = R()*WIDTH; y = R()*HEIGHT;
+        H = 80*(i/v)+Math.random()*100; S = 40*R()+60; B = 60*R()+20;
+        f = []; for (k = 0; k < v;) f[k++] = {x:x,y:y,X:0,Y:0,R:1-k/v+1,S:R()+1,q:~~(R()*v),D:2*(i%2)-1,F:0.2*R()+0.7,f:"hsla("+~~H+","+~~S+"%,"+~~B+"%,.1)"};
+        e[i++] = f;
+    }
+    
+    function path(d) {
+        a.fillStyle = d.f; a.beginPath(); a.arc(d.x,d.y,d.R,0,Y,1); a.closePath(); a.fill();
+    }
+    
+    setInterval(function() {
+        a.fillStyle = "rgba(0,0,0,.2)"; a.fillRect(0,0,WIDTH,HEIGHT);
+        for (i = v; i--;) {
+            f = e[i]; u = f[0]; q = h[u.q]; D = u.x-q[0]; E = u.y-q[1]; G = Math.sqrt(D*D+E*E);
+            if (10>G) { if (0.95<R()) u.q = ~~(R()*v); else { if (0.99<R()) u.D *= -1; u.q += u.D; u.q %= v; if (u.q<0) u.q += v; } }
+            u.X += -D/G*u.S; u.Y += -E/G*u.S; u.x += u.X; u.y += u.Y; path(u); u.X *= u.F; u.Y *= u.F;
+            for (k = 0; k < v-1;) { T = f[k]; N = f[++k]; N.x -= 0.7*(N.x-T.x); N.y -= 0.7*(N.y-T.y); path(N); }
+        }
+    }, 25);
+}
+
+// MEDIA & MUSIC
+const mediaFiles = ['p1.jpeg','p3.jpeg','p4.jpeg','p5.jpeg','p6.jpeg','p7.jpeg','v1.mp4','v2.mp4','v3.mp4'];
+const musicFiles = ['lagu1.mp3']; 
+const songNames = ['Mahika - Adie & Janine']; 
+let currentSongIndex = 0; 
+let audioPlayer, musicCover;
+
+function initGallery() {
+    const list = document.getElementById('thumbnailList'); list.innerHTML = '';
+    mediaFiles.forEach(file => {
         const isVideo = file.includes('.mp4');
-        const element = document.createElement(isVideo ? 'video' : 'img');
-        
-        element.src = file;
-        element.onclick = () => showMedia(file, isVideo);
-        element.muted = true;
-        
-        element.onerror = () => {
-            element.outerHTML = `
-                <div style="width:100%;height:90px;background:#4a5568;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:30px;opacity:0.7;cursor:pointer;" onclick="showPlaceholder('${file}')" title="File ${file} tidak ditemukan">
-                    ${isVideo ? '🎥' : '📷'}
-                </div>
-            `;
-        };
-        
-        thumbnailList.appendChild(element);
+        const el = document.createElement(isVideo ? 'video' : 'img');
+        el.src = file; el.onclick = () => showMedia(file, isVideo); el.muted = true;
+        el.onerror = () => el.outerHTML = `<div style="width:100%;height:90px;background:#4a5568;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:30px;">${isVideo?'🎥':'📷'}</div>`;
+        list.appendChild(el);
     });
+}
+
+function showMedia(file, isVideo) {
+    const display = document.getElementById('mainDisplay');
+    display.innerHTML = isVideo ? 
+        `<video src="${file}" controls autoplay loop muted style="max-width:95%;max-height:95%;border-radius:20px;"></video>` : 
+        `<img src="${file}" style="max-width:95%;max-height:95%;border-radius:20px;" onerror="this.outerHTML='<div style=\'color:#60a5fa;font-size:24px;padding:40px;text-align:center;\'>Gambar tidak ditemukan 💙</div>'">`;
 }
 
 function initMusic() {
     audioPlayer = document.getElementById('musicPlayer');
     musicCover = document.getElementById('musicCover');
-    updateSongDisplay();
-    
-    setTimeout(() => {
-        if (audioPlayer && audioPlayer.paused) {
-            audioPlayer.play().catch(e => console.log('Autoplay blocked'));
-        }
-    }, 500);
+    setTimeout(() => audioPlayer?.play().catch(e=>{}), 500);
 }
 
 function togglePlay() {
-    if (!audioPlayer) return;
-    
+    if(!audioPlayer) return;
     if(audioPlayer.paused) {
-        audioPlayer.play();
-        document.getElementById('playBtn').innerHTML = '⏸';
-        document.getElementById('musicCover').style.animationPlayState = 'running';
+        audioPlayer.play(); 
+        document.getElementById('playBtn').innerHTML = '⏸'; 
+        musicCover.style.animationPlayState = 'running';
     } else {
-        audioPlayer.pause();
-        document.getElementById('playBtn').innerHTML = '▶';
-        document.getElementById('musicCover').style.animationPlayState = 'paused';
+        audioPlayer.pause(); 
+        document.getElementById('playBtn').innerHTML = '▶'; 
+        musicCover.style.animationPlayState = 'paused';
     }
 }
 
 function stopMusic() {
-    if (!audioPlayer) return;
+    if(!audioPlayer) return;
     audioPlayer.pause();
     audioPlayer.currentTime = 0;
     document.getElementById('playBtn').innerHTML = '▶';
-    document.getElementById('musicCover').style.animationPlayState = 'paused';
+    musicCover.style.animationPlayState = 'paused';
 }
 
 function prevSong() {
@@ -526,54 +713,200 @@ function switchSong() {
     audioPlayer.load();
     audioPlayer.play();
     document.getElementById('playBtn').innerHTML = '⏸';
-    document.getElementById('musicCover').style.animationPlayState = 'running';
-    updateSongDisplay();
+    musicCover.style.animationPlayState = 'running';
 }
 
-function updateSongDisplay() {
-    document.getElementById('currentSong').textContent = songNames[currentSongIndex] || musicFiles[currentSongIndex];
-}
+// FLOWER CURSOR ANIMATION
+function initFlowerCursor() {
+    // Import Three.js dynamically
+    const script = document.createElement('script');
+    script.type = 'module';
+    script.textContent = `
+        import * as THREE from "https://cdn.skypack.dev/three@0.139.1/build/three.module";
 
-function showMedia(filename, isVideo) {
-    const mainDisplay = document.getElementById('mainDisplay');
-    mainDisplay.innerHTML = 'Memuat... 💙';
-    
-    if(isVideo) {
-        const video = document.createElement('video');
-        video.src = filename;
-        video.controls = true;
-        video.autoplay = true;
-        video.loop = true;
-        video.muted = true;
-        video.style.maxWidth = '95%';
-        video.style.maxHeight = '95%';
-        video.style.borderRadius = '20px';
-        video.onerror = () => mainDisplay.innerHTML = `Video ${filename} tidak ditemukan`;
+        const canvasEl = document.querySelector("#flowerCanvas");
+        const cleanBtn = document.querySelector(".flower-clean-btn");
+        const pointer = {x: .5, y: .65, moved: false, speed: 0, vanishCanvas: false, drawingAllowed: true};
         
-        mainDisplay.innerHTML = '';
-        mainDisplay.appendChild(video);
-    } else {
-        const img = new Image();
-        img.src = filename;
-        img.style.maxWidth = '95%';
-        img.style.maxHeight = '95%';
-        img.style.borderRadius = '20px';
-        img.onload = () => {
-            mainDisplay.innerHTML = '';
-            mainDisplay.appendChild(img);
-        };
-        img.onerror = () => {
-            mainDisplay.innerHTML = `Gambar ${filename} tidak ditemukan`;
-        };
-    }
-}
+        setTimeout(() => {pointer.x = .7; pointer.y = .5; pointer.moved = true;}, 400);
 
-function showPlaceholder(filename) {
-    document.getElementById('mainDisplay').innerHTML = 
-        `File ${filename} tidak ditemukan. Pastikan semua file ada di folder yang sama dengan HTML 💙`;
+        let basicMaterial, shaderMaterial;
+        let renderer = new THREE.WebGLRenderer({canvas: canvasEl, alpha: true});
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        let sceneShader = new THREE.Scene();
+        let sceneBasic = new THREE.Scene();
+        let camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 10);
+        let clock = new THREE.Clock();
+        let renderTargets = [
+            new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight),
+            new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight)
+        ];
+
+        const fragmentShaderCode = \`
+            #define PI 3.14159265359
+            uniform float u_ratio;
+            uniform float u_moving;
+            uniform float u_stop_time;
+            uniform float u_speed;
+            uniform vec2 u_stop_randomizer;
+            uniform float u_clean;
+            uniform vec2 u_point;
+            uniform sampler2D u_texture;
+            varying vec2 vUv;
+
+            float rand(vec2 n) {
+                return fract(sin(dot(n, vec2(12.9898, 4.1414))) * 43758.5453);
+            }
+            float noise(vec2 n) {
+                const vec2 d = vec2(0., 1.);
+                vec2 b = floor(n), f = smoothstep(vec2(0.), vec2(1.), fract(n));
+                return mix(mix(rand(b), rand(b + d.yx), f.x), mix(rand(b + d.xy), rand(b + d.yy), f.x), f.y);
+            }
+
+            float flower_shape(vec2 _point, float _size, float _outline, float _tickniess, float _noise, float _angle_offset) {
+                float random_by_uv = noise(vUv);
+                float petals_thickness = .5;
+                float petals_number = 5. + floor(u_stop_randomizer[0] * 4.);
+                float angle_animated_offset = .7 * (random_by_uv - .5) / (1. + 30. * u_stop_time);
+                float flower_angle = atan(_point.y, _point.x) - angle_animated_offset;
+                float flower_sectoral_shape = abs(sin(flower_angle * .5 * petals_number + _angle_offset)) + _tickniess * petals_thickness;
+                vec2 flower_size_range = vec2(4., 18.);
+                float flower_radial_shape = length(_point) * (flower_size_range[0] + flower_size_range[1] * u_stop_randomizer[0]);
+                float radius_noise = sin(flower_angle * 13. + 15. * random_by_uv);
+                flower_radial_shape += _noise * radius_noise;
+                float flower_radius_grow = min(20000. * u_stop_time, 1.);
+                flower_radius_grow = 1. / flower_radius_grow;
+                float flower_shape = 1. - smoothstep(0., _size * flower_sectoral_shape, _outline * flower_radius_grow * flower_radial_shape);
+                flower_shape *= (1. - u_moving);
+                flower_shape *= (1. - step(1., u_stop_time));
+                return flower_shape;
+            }
+
+            void main() {
+                vec3 base = texture2D(u_texture, vUv).xyz;
+                vec2 cursor = vUv - u_point.xy;
+                cursor.x *= u_ratio;
+                vec3 stem_color = vec3(0., 2., 1.5);
+                float stem_radius = .003 * u_speed * u_moving;
+                float stem_shape = 1. - pow(smoothstep(0., stem_radius, dot(cursor, cursor)), .03);
+                vec3 stem = stem_shape * stem_color;
+                vec3 flower_color = vec3(.7 + u_stop_randomizer[1], .8 * u_stop_randomizer[1], 2.9 + u_stop_randomizer[0] * .6);
+                vec3 flower_new = flower_color * flower_shape(cursor, 1., .96, 1., .15, 0.);
+                vec3 flower_mask = 1. - vec3(flower_shape(cursor, 1.05, 1.07, 1., .15, 0.));
+                vec3 flower_mid = vec3(-.6) * flower_shape(cursor, .15, 1., 2., .1, 1.9);
+                vec3 color = base * flower_mask + (flower_new + flower_mid + stem);
+                color *= u_clean;
+                color = clamp(color, vec3(.0, .0, .15), vec3(1., 1., .4));
+                gl_FragColor = vec4(color, 1.);
+            }
+        \`;
+
+        const vertexShaderCode = \`
+            varying vec2 vUv;
+            void main() {
+                vUv = uv;
+                gl_Position = vec4(position, 1.);
+            }
+        \`;
+
+        function createPlane() {
+            shaderMaterial = new THREE.ShaderMaterial({
+                uniforms: {
+                    u_stop_time: {value: 0.},
+                    u_point: {value: new THREE.Vector2(pointer.x, pointer.y)},
+                    u_moving: {value: 0.},
+                    u_speed: {value: 0.},
+                    u_stop_randomizer: {value: new THREE.Vector2(Math.random(), Math.random())},
+                    u_clean: {value: 1.},
+                    u_ratio: {value: window.innerWidth / window.innerHeight},
+                    u_texture: {value: null}
+                },
+                vertexShader: vertexShaderCode,
+                fragmentShader: fragmentShaderCode
+            });
+            basicMaterial = new THREE.MeshBasicMaterial();
+            const planeGeometry = new THREE.PlaneGeometry(2, 2);
+            const planeBasic = new THREE.Mesh(planeGeometry, basicMaterial);
+            const planeShader = new THREE.Mesh(planeGeometry, shaderMaterial);
+            sceneBasic.add(planeBasic);
+            sceneShader.add(planeShader);
+        }
+
+        function render() {
+            shaderMaterial.uniforms.u_clean.value = pointer.vanishCanvas ? 0 : 1;
+            shaderMaterial.uniforms.u_point.value = new THREE.Vector2(pointer.x, 1 - pointer.y);
+            shaderMaterial.uniforms.u_texture.value = renderTargets[0].texture;
+            shaderMaterial.uniforms.u_ratio.value = window.innerWidth / window.innerHeight;
+            if (pointer.moved) {
+                shaderMaterial.uniforms.u_moving.value = 1.;
+                shaderMaterial.uniforms.u_stop_randomizer.value = new THREE.Vector2(Math.random(), Math.random());
+                if (window.innerWidth < 650) {
+                    shaderMaterial.uniforms.u_stop_randomizer.value.x *= .2;
+                    shaderMaterial.uniforms.u_stop_randomizer.value.x += .8;
+                }
+                shaderMaterial.uniforms.u_stop_time.value = 0.;
+                pointer.moved = false;
+            } else {
+                shaderMaterial.uniforms.u_moving.value = 0.;
+            }
+            shaderMaterial.uniforms.u_stop_time.value += clock.getDelta();
+            shaderMaterial.uniforms.u_speed.value = pointer.speed;
+            renderer.setRenderTarget(renderTargets[1]);
+            renderer.render(sceneShader, camera);
+            basicMaterial.map = renderTargets[1].texture;
+            renderer.setRenderTarget(null);
+            renderer.render(sceneBasic, camera);
+            let tmp = renderTargets[0];
+            renderTargets[0] = renderTargets[1];
+            renderTargets[1] = tmp;
+            requestAnimationFrame(render);
+        }
+
+        function updateSize() {
+            shaderMaterial.uniforms.u_ratio.value = window.innerWidth / window.innerHeight;
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function cleanCanvas() {
+            pointer.vanishCanvas = true;
+            setTimeout(() => {pointer.vanishCanvas = false;}, 50);
+        }
+
+        createPlane();
+        updateSize();
+        window.addEventListener("resize", () => {cleanCanvas(); updateSize();});
+        render();
+
+        window.addEventListener("mousemove", (e) => {
+            if (pointer.drawingAllowed) {
+                pointer.moved = true;
+                const dx = 12 * (e.pageX / window.innerWidth - pointer.x);
+                const dy = 12 * (e.pageY / window.innerHeight - pointer.y);
+                pointer.x = e.pageX / window.innerWidth;
+                pointer.y = e.pageY / window.innerHeight;
+                pointer.speed = Math.min(2, Math.pow(dx, 2) + Math.pow(dy, 2));
+            }
+        });
+        canvasEl.addEventListener("click", (e) => {
+            pointer.x = e.pageX / window.innerWidth;
+            pointer.y = e.pageY / window.innerHeight;
+            pointer.drawingAllowed = !pointer.drawingAllowed;
+            if (pointer.drawingAllowed) pointer.moved = true;
+        });
+        window.addEventListener("touchmove", (e) => {
+            pointer.moved = true;
+            const dx = 5 * (e.targetTouches[0].pageX / window.innerWidth - pointer.x);
+            const dy = 5 * (e.targetTouches[0].pageY / window.innerHeight - pointer.y);
+            pointer.x = e.targetTouches[0].pageX / window.innerWidth;
+            pointer.y = e.targetTouches[0].pageY / window.innerHeight;
+            pointer.speed = Math.min(2, 20 * (Math.pow(dx, 2) + Math.pow(dy, 2)));
+        });
+        window.addEventListener("keydown", (e) => {if (e.key === " ") cleanCanvas();});
+        cleanBtn.addEventListener("click", cleanCanvas);
+    `;
+    document.body.appendChild(script);
 }
 </script>
 
 </body>
 </html>
-
