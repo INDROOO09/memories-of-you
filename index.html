@@ -932,6 +932,11 @@ body{background:url("bg.jpg.jpg") center/cover no-repeat fixed,#0a0e27}
 .dot.active{width:26px;opacity:1;background:var(--pill)}
 @media (prefers-reduced-motion:reduce){.greeting-in{animation:none}}
 
+/* ================= PECAHKAN BALON ================= */
+/* balon melayang di atas Home; hanya balonnya yang bisa disentuh, sisanya tembus ke halaman */
+#balloonSky{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:40;pointer-events:none;overflow:visible}
+.balloon-hit{cursor:pointer;pointer-events:auto;touch-action:manipulation}
+
 </style>
 </head>
 <body>
@@ -940,14 +945,16 @@ body{background:url("bg.jpg.jpg") center/cover no-repeat fixed,#0a0e27}
 <!-- ============ HOME (rumah baru) ============ -->
 <div id="menu" class="page active">
 
+<!-- BALON: terbang bebas di atas Home -->
+<svg id="balloonSky" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
+
 <nav class="nav">
   <div class="logo">Untuk Kamu 💙</div>
   <ul class="nav-links">
     <li><a href="#top">Beranda</a></li>
     <li><a href="#story">Our Story</a></li>
     <li><a href="#musik">Musik</a></li>
-    <li><a href="#kenangan">Kenangan</a></li>
-  </ul>
+    <li><a href="#kenangan">Kenangan</a></li>  </ul>
   <button class="contact-pill" onclick="openFromMenu('chocolate')">Coklat Valentine</button>
   <button class="menu-toggle" id="menuToggle" onclick="toggleMenu(event)" aria-label="Menu" aria-haspopup="true" aria-expanded="false"><span></span><span></span><span></span></button>
 </nav>
@@ -956,8 +963,7 @@ body{background:url("bg.jpg.jpg") center/cover no-repeat fixed,#0a0e27}
   <button class="menu-item" role="menuitem" onclick="goSection('story')">Our Story</button>
   <button class="menu-item" role="menuitem" onclick="goSection('musik')">Musik</button>
   <button class="menu-item" role="menuitem" onclick="openFromMenu('gallery')">Gallery of You</button>
-  <button class="menu-item" role="menuitem" onclick="openFromMenu('letter')">Surat Untukmu</button>
-  <button class="menu-item" role="menuitem" id="chocolateBtn" title="Rahasia Khusus" onclick="openFromMenu('chocolate')">Coklat Valentine</button>
+  <button class="menu-item" role="menuitem" onclick="openFromMenu('letter')">Surat Untukmu</button>  <button class="menu-item" role="menuitem" id="chocolateBtn" title="Rahasia Khusus" onclick="openFromMenu('chocolate')">Coklat Valentine</button>
 </div>
 
 <!-- GREETING (paling atas) -->
@@ -1221,8 +1227,7 @@ function openPage(pageId) {
 function openSubPage(pageId) {
     document.body.classList.add('hide-chocolate');
     openPage(pageId);
-    if(pageId === 'gallery') initGallery();
-}
+    if(pageId === 'gallery') initGallery();}
 
 function openPinPage() {
     document.body.classList.add('black-bg', 'hide-chocolate');
@@ -1784,6 +1789,178 @@ function initFlowerCursor() {
     document.body.appendChild(script);
 }
 
+// ============================================================
+//  PECAHKAN BALON — 5 balon terbang bebas; pecahkan semuanya untuk lanjut
+// ============================================================
+// Ganti dengan nama file halaman yang sudah kamu siapkan:
+const BALLOON_TARGET_PAGE = 'BirthDay_NOPAAK.html';
+const BALLOON_COLORS = ['#3d8fe0', '#e2574c', '#f2b632', '#4cb86b', '#9b6bd6'];
+let bl = null;
+
+function stopBalloons() {
+    if (!bl) return;
+    cancelAnimationFrame(bl.raf);
+    clearTimeout(bl.redirectTimer);
+    window.removeEventListener('resize', bl.onResize);
+    bl = null;
+}
+
+function startBalloons() {
+    stopBalloons();
+    const NS = 'http://www.w3.org/2000/svg';
+    const sky = document.getElementById('balloonSky');
+    sky.innerHTML = '';
+    const stringLayer = document.createElementNS(NS, 'g');
+    const balloonLayer = document.createElementNS(NS, 'g');
+    const partLayer = document.createElementNS(NS, 'g');
+    sky.appendChild(stringLayer);
+    sky.appendChild(balloonLayer);
+    sky.appendChild(partLayer);
+
+    const SEG = 20;
+    const st = { W: 0, H: 0, S: 1, segLen: 14, list: [], parts: [], popped: 0, raf: 0, redirectTimer: 0, onResize: null };
+    bl = st;
+
+    function el(tag, attrs, parent) {
+        const n = document.createElementNS(NS, tag);
+        for (const k in attrs) n.setAttribute(k, attrs[k]);
+        if (parent) parent.appendChild(n);
+        return n;
+    }
+    function margin() { return { l: 72 * st.S, r: 72 * st.S, t: 180 * st.S }; }
+    function resize() {
+        st.W = window.innerWidth; st.H = window.innerHeight;
+        sky.setAttribute('viewBox', '0 0 ' + st.W + ' ' + st.H);
+        st.S = Math.max(0.5, Math.min(1.4, Math.min(st.W, st.H) / 560));
+        st.segLen = 13 * st.S;
+    }
+    function pickTarget(b) {
+        const m = margin();
+        b.tx = m.l + Math.random() * Math.max(1, st.W - m.l - m.r);
+        b.ty = m.t + Math.random() * Math.max(1, st.H * 0.82 - m.t);
+    }
+    st.onResize = resize;
+    window.addEventListener('resize', resize);
+    resize();
+
+    BALLOON_COLORS.forEach((color, i) => {
+        const b = {
+            color, popped: false, ph: Math.random() * 20,
+            x: st.W * (0.12 + 0.19 * i) + (Math.random() - 0.5) * 40,
+            y: st.H + (120 + i * 70) * st.S,
+            vx: 0, vy: -2.2 * st.S, tx: 0, ty: 0,
+            nextTarget: performance.now() + 1500 + Math.random() * 3000,
+            pts: []
+        };
+        pickTarget(b);
+        b.stringEl = el('path', { d: '', fill: 'none', stroke: '#000', 'stroke-width': 2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', opacity: 0.6 }, stringLayer);
+        b.g = el('g', { class: 'balloon-hit' }, balloonLayer);
+        el('ellipse', { cx: 0, cy: -96, rx: 54, ry: 64, fill: color }, b.g);
+        el('path', { d: 'M-7 -33 L7 -33 L17 -2 L0 -9 L-17 -2 Z', fill: color }, b.g);
+        el('path', { d: 'M26 -128 c10 8 14 22 10 36', fill: 'none', stroke: '#fff', 'stroke-width': 7, 'stroke-linecap': 'round', opacity: 0.5 }, b.g);
+        for (let k = 0; k < SEG; k++) b.pts.push({ x: b.x, y: b.y + k * st.segLen, px: b.x, py: b.y + k * st.segLen });
+        b.g.addEventListener('pointerdown', (e) => { e.preventDefault(); popBalloon(b); });
+        st.list.push(b);
+    });
+
+    function popBalloon(b) {
+        if (b.popped) return;
+        b.popped = true;
+        const cx = b.cx, cy = b.cy;
+        b.g.remove();
+        for (let k = 0; k < 16; k++) {
+            const ang = (k / 16) * Math.PI * 2 + Math.random() * 0.4;
+            const sp = (3 + Math.random() * 5) * st.S;
+            const c = el('circle', { r: (3 + Math.random() * 4) * st.S, fill: b.color }, partLayer);
+            st.parts.push({ c, x: cx, y: cy, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp, life: 1 });
+        }
+        st.popped++;
+        if (st.popped >= BALLOON_COLORS.length) {
+            st.redirectTimer = setTimeout(() => { window.location.href = BALLOON_TARGET_PAGE; }, 1100);
+        }
+    }
+
+    function frame(time) {
+        if (bl !== st) return;
+        // saat halaman lain sedang terbuka, balon di Home berhenti sebentar (tidak membuang tenaga)
+        if (!document.getElementById('menu').classList.contains('active')) { st.raf = requestAnimationFrame(frame); return; }
+        const t = time / 1000;
+        const m = margin();
+        const S = st.S;
+
+        st.list.forEach((b) => {
+            if (!b.popped) {
+                if (time > b.nextTarget) { pickTarget(b); b.nextTarget = time + 3500 + Math.random() * 3500; }
+                const tt = t + b.ph;
+                const ax = (b.tx - b.x) * 0.00035 * S + Math.sin(tt * 0.7) * 0.012 * S;
+                const ay = (b.ty - b.y) * 0.00035 * S + Math.cos(tt * 0.55) * 0.010 * S;
+                b.vx = (b.vx + ax) * 0.992;
+                b.vy = (b.vy + ay) * 0.992;
+                b.x += b.vx; b.y += b.vy;
+                if (b.x < m.l) { b.x = m.l; b.vx = Math.abs(b.vx) * 0.5; }
+                if (b.x > st.W - m.r) { b.x = st.W - m.r; b.vx = -Math.abs(b.vx) * 0.5; }
+                if (b.y < m.t) { b.y = m.t; b.vy = Math.abs(b.vy) * 0.5; }
+
+                const x = b.x + Math.sin(tt * 1.3) * 5 * S;
+                const y = b.y + Math.cos(tt * 1.7) * 6 * S;
+                const tilt = Math.max(-14, Math.min(14, b.vx * 5)) + Math.sin(tt * 1.1) * 3;
+                b.g.setAttribute('transform', 'translate(' + x + ',' + y + ') rotate(' + tilt + ') scale(' + S + ')');
+                b.px = x; b.py = y;
+                b.cx = x; b.cy = y - 96 * S;
+            }
+
+            const pts = b.pts;
+            const pinned = !b.popped;
+            if (pinned) { pts[0].x = b.px; pts[0].y = b.py; }
+            for (let i = pinned ? 1 : 0; i < SEG; i++) {
+                const p = pts[i];
+                const vx = (p.x - p.px) * 0.96, vy = (p.y - p.py) * 0.96;
+                p.px = p.x; p.py = p.y;
+                p.x += vx + Math.sin(t * 1.2 + i * 0.5) * 0.06 * S;
+                p.y += vy + 0.32 * S;
+            }
+            for (let it = 0; it < 6; it++) {
+                if (pinned) { pts[0].x = b.px; pts[0].y = b.py; }
+                for (let j = 1; j < SEG; j++) {
+                    const a = pts[j - 1], c = pts[j];
+                    const dx = c.x - a.x, dy = c.y - a.y;
+                    const d = Math.sqrt(dx * dx + dy * dy) || 0.0001;
+                    const diff = (d - st.segLen) / d;
+                    if (j === 1 && pinned) { c.x -= dx * diff; c.y -= dy * diff; }
+                    else { a.x += dx * diff * 0.5; a.y += dy * diff * 0.5; c.x -= dx * diff * 0.5; c.y -= dy * diff * 0.5; }
+                }
+            }
+            let d = 'M' + pts[0].x.toFixed(1) + ' ' + pts[0].y.toFixed(1);
+            for (let k = 1; k < SEG - 1; k++) {
+                const mx = (pts[k].x + pts[k + 1].x) / 2, my = (pts[k].y + pts[k + 1].y) / 2;
+                d += ' Q' + pts[k].x.toFixed(1) + ' ' + pts[k].y.toFixed(1) + ' ' + mx.toFixed(1) + ' ' + my.toFixed(1);
+            }
+            b.stringEl.setAttribute('d', d);
+
+            // tali balon yang sudah pecah jatuh, lalu dihapus saat keluar layar
+            if (b.popped && !b.stringGone && pts.every(p => p.y > st.H + 40)) {
+                b.stringGone = true;
+                b.stringEl.remove();
+            }
+        });
+
+        // serpihan balon pecah
+        for (let i = st.parts.length - 1; i >= 0; i--) {
+            const p = st.parts[i];
+            p.vx *= 0.96; p.vy = p.vy * 0.96 + 0.18 * S;
+            p.x += p.vx; p.y += p.vy;
+            p.life -= 0.028;
+            if (p.life <= 0) { p.c.remove(); st.parts.splice(i, 1); continue; }
+            p.c.setAttribute('cx', p.x.toFixed(1));
+            p.c.setAttribute('cy', p.y.toFixed(1));
+            p.c.setAttribute('opacity', p.life.toFixed(2));
+        }
+
+        st.raf = requestAnimationFrame(frame);
+    }
+    st.raf = requestAnimationFrame(frame);
+}
+
 // MENU ⋮
 function openMenu() {
     closeSongList();
@@ -1991,6 +2168,9 @@ initMusic();
 // Our Story & greeting (di Home)
 initStory();
 initGreeting();
+
+// Balon langsung terbang di Home sejak halaman dibuka
+startBalloons();
 </script>
 <script>
 
